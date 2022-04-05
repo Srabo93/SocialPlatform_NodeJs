@@ -31,6 +31,7 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
+      autoRemove: "native",
     }),
   })
 );
