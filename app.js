@@ -13,9 +13,11 @@ dotenv.config({ path: "./config/config.env" });
 require("./config/passport")(passport);
 /*Connect DB */
 connectDB();
-
 /*Initialize App */
 const app = express();
+/*Body Parser */
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 /*Logging Devenviroment */
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
