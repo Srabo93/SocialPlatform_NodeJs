@@ -2,16 +2,18 @@ const express = require("express");
 const path = require("path");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const morgan = require("morgan");
-const { engine } = require("express-handlebars");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const passport = require("passport");
+const { engine } = require("express-handlebars");
+const morgan = require("morgan");
 /*Load Config */
 dotenv.config({ path: "./config/config.env" });
 /*Passport Config */
 require("./config/passport")(passport);
 /*Connect DB */
 connectDB();
+
 /*Initialize App */
 const app = express();
 /*Logging Devenviroment */
@@ -27,6 +29,9 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+    }),
   })
 );
 /*Passport Middleware */
