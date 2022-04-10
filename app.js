@@ -22,8 +22,10 @@ app.use(express.json());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+/*Handlebars Helper */
+const { formatDate } = require("./helpers/hbs");
 /*Handlebars */
-app.engine(".hbs", engine({ extname: ".hbs" }));
+app.engine(".hbs", engine({ helpers: { formatDate }, extname: ".hbs" }));
 app.set("view engine", ".hbs");
 /*Sessions */
 app.use(
