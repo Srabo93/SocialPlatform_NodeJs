@@ -7,6 +7,7 @@ const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const { engine } = require("express-handlebars");
 const morgan = require("morgan");
+
 /*Load Config */
 dotenv.config({ path: "./config/config.env" });
 /*Passport Config */
@@ -23,9 +24,12 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 /*Handlebars Helper */
-const { formatDate } = require("./helpers/hbs");
+const { formatDate, stripString } = require("./helpers/hbs");
 /*Handlebars */
-app.engine(".hbs", engine({ helpers: { formatDate }, extname: ".hbs" }));
+app.engine(
+  ".hbs",
+  engine({ helpers: { formatDate, stripString }, extname: ".hbs" })
+);
 app.set("view engine", ".hbs");
 /*Sessions */
 app.use(
