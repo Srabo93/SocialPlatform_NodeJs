@@ -24,11 +24,11 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 /*Handlebars Helper */
-const { formatDate, stripString } = require("./helpers/hbs");
+const { formatDate, stripString, editIcon } = require("./helpers/hbs");
 /*Handlebars */
 app.engine(
   ".hbs",
-  engine({ helpers: { formatDate, stripString }, extname: ".hbs" })
+  engine({ helpers: { formatDate, stripString, editIcon }, extname: ".hbs" })
 );
 app.set("view engine", ".hbs");
 /*Sessions */
@@ -46,6 +46,11 @@ app.use(
 /*Passport Middleware */
 app.use(passport.initialize());
 app.use(passport.session());
+
+/*Set globar vars*/
+app.use(function (req, res, next) {
+  res.locals.user = req.user || null;
+});
 /*Routes */
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
