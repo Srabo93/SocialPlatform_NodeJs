@@ -50,6 +50,7 @@ app.use(passport.session());
 /*Set globar vars*/
 app.use(function (req, res, next) {
   res.locals.user = req.user || null;
+  next();
 });
 /*Routes */
 app.use("/", require("./routes/index"));
