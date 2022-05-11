@@ -24,11 +24,14 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 /*Handlebars Helper */
-const { formatDate, stripString, editIcon } = require("./helpers/hbs");
+const { formatDate, stripString, editIcon, select } = require("./helpers/hbs");
 /*Handlebars */
 app.engine(
   ".hbs",
-  engine({ helpers: { formatDate, stripString, editIcon }, extname: ".hbs" })
+  engine({
+    helpers: { formatDate, stripString, editIcon, select },
+    extname: ".hbs",
+  })
 );
 app.set("view engine", ".hbs");
 /*Sessions */
