@@ -43,8 +43,6 @@ router.post("/", ensureAuth, async (req, res) => {
     res.render("../views/errors/500");
   }
 });
-module.exports = router;
-
 /**
  * @desc Edit a Story
  * @route GET /stories/edit/:id
@@ -58,3 +56,24 @@ router.get("/edit/:id", ensureAuth, async (req, res) => {
     ? res.redirect("/stories")
     : res.render("stories/edit", { story });
 });
+
+/**
+ * @desc Update a Story
+ * @route PUT /stories/:id
+ */
+router.put("/:id", ensureAuth, async (req, res) => {
+  const story = await Story.findById(req.params.id).lean();
+
+  if (!story) return res.render("error/404");
+
+  story.user != req.user.id
+    ? res.redirect("/stories")
+    : (story = await Story.findOneAndUpdate({ _id: req.params.id }, req.body, {
+        new: true,
+        runValidators: true,
+      }));
+
+  res.redirect("/dashboard");
+});
+
+module.exports = router;
