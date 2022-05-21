@@ -30,6 +30,23 @@ router.get("/", ensureAuth, async (req, res) => {
 });
 
 /**
+ * @desc Show single Story
+ * @route GET /stories/:id
+ */
+router.get("/:id", ensureAuth, async (req, res) => {
+  try {
+    let story = await Story.findById({ _id: req.params.id })
+      .populate("user")
+      .lean();
+    if (!story) return res.render("error/404");
+    res.render("stories/show", { story });
+  } catch (error) {
+    console.log(error);
+    res.render("error/500");
+  }
+});
+
+/**
  * @desc Process added Story
  * @route POST /stories/
  */
@@ -104,4 +121,22 @@ router.delete("/:id", ensureAuth, async (req, res) => {
   }
 });
 
+/**
+ * @desc User Stories
+ * @route GET /stories/user/:userId
+ */
+router.get("/user/:userId", ensureAuth, async (req, res) => {
+  try {
+    let stories = await Story.find({
+      user: req.params.userId,
+      status: "public",
+    })
+      .populate("user")
+      .lean();
+    res.render("stories/index", { stories });
+  } catch (error) {
+    console.log(error);
+    res.redirect("error/500");
+  }
+});
 module.exports = router;
