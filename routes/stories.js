@@ -48,13 +48,18 @@ router.post("/", ensureAuth, async (req, res) => {
  * @route GET /stories/edit/:id
  */
 router.get("/edit/:id", ensureAuth, async (req, res) => {
-  const story = await Story.findOne({ _id: req.params.id }).lean();
+  try {
+    const story = await Story.findOne({ _id: req.params.id }).lean();
 
-  if (!story) return res.render("error/404");
+    if (!story) return res.render("error/404");
 
-  story.user != req.user.id
-    ? res.redirect("/stories")
-    : res.render("stories/edit", { story });
+    story.user != req.user.id
+      ? res.redirect("/stories")
+      : res.render("stories/edit", { story });
+  } catch (error) {
+    console.log(error);
+    res.redirect("error/500");
+  }
 });
 
 /**
@@ -62,18 +67,41 @@ router.get("/edit/:id", ensureAuth, async (req, res) => {
  * @route PUT /stories/:id
  */
 router.put("/:id", ensureAuth, async (req, res) => {
-  const story = await Story.findById(req.params.id).lean();
+  try {
+    let story = await Story.findById(req.params.id).lean();
 
-  if (!story) return res.render("error/404");
+    if (!story) return res.render("error/404");
 
-  story.user != req.user.id
-    ? res.redirect("/stories")
-    : (story = await Story.findOneAndUpdate({ _id: req.params.id }, req.body, {
-        new: true,
-        runValidators: true,
-      }));
+    story.user != req.user.id
+      ? res.redirect("/stories")
+      : (story = await Story.findOneAndUpdate(
+          { _id: req.params.id },
+          req.body,
+          {
+            new: true,
+            runValidators: true,
+          }
+        ));
 
-  res.redirect("/dashboard");
+    res.redirect("/dashboard");
+  } catch (error) {
+    console.log(error);
+    res.redirect("error/500");
+  }
+});
+
+/**
+ * @desc Delete Story
+ * @route DELETE /stories/:id
+ */
+router.delete("/:id", ensureAuth, async (req, res) => {
+  try {
+    await Story.remove({ _id: req.params.id });
+    res.redirect("/dashboard");
+  } catch (error) {
+    console.log(error);
+    res.redirect("error/500");
+  }
 });
 
 module.exports = router;
