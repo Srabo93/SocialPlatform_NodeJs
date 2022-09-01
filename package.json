@@ -1,7 +1,7 @@
 {
-  "name": "telltales",
+  "name": "StoryTimes",
   "version": "1.0.0",
-  "description": "tell storys and tales online",
+  "description": "tell storys online",
   "main": "app.js",
   "engines": { 
     "node": "14.x"
