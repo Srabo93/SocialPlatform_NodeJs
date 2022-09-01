@@ -43,6 +43,7 @@ app.engine(
   engine({
     helpers: { formatDate, stripString, editIcon, select },
     extname: ".hbs",
+    layoutsDir: "/views",
   })
 );
 app.set("view engine", ".hbs");
