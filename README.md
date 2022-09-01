@@ -17,7 +17,7 @@ Functionality of the API:
 - CRUD functionalities
 
 ## Live Demo
-https://storytime1337.herokuapp.com/
+https://storytime-y7qk.onrender.com/
 
 ## Install Dependencies
 ```
