@@ -19,8 +19,10 @@ Functionality of the API:
 ## Live Demo
 https://storytime-y7qk.onrender.com/
 
-## Install Dependencies
+## Run Development
+Rename config/.env.env to config/.env and adjust values.
+
 ```
 npm install
+npm run dev
 ```
-
