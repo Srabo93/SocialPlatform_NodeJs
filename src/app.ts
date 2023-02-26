@@ -1,18 +1,24 @@
-const express = require("express");
-const path = require("path");
-const dotenv = require("dotenv");
-const methodOverride = require("method-override");
-const connectDB = require("./config/db");
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
-const passport = require("passport");
-const { engine } = require("express-handlebars");
-const morgan = require("morgan");
+import express, { Request, Response, NextFunction } from "express";
+import path from "path";
+import methodOverride from "method-override";
+import connectDB from "./config/db";
+import session from "express-session";
+import { SESSION_SECRET, MONGO_URI, ENVIRONMENT } from "./config/config";
+import MongoStore from "connect-mongo";
+import passport from "passport";
+import {
+  passportConfig,
+  deserializeUser,
+  serializeUser,
+} from "./config/passport";
+import { engine } from "express-handlebars";
+import { editIcon, stripString, formatDate } from "./helpers/hbs";
+import morgan from "morgan";
+/*Routes */
+import storyRoutes from "./routes/stories";
+import authRoutes from "./routes/auth";
+import index from "./routes/index";
 
-/*Load Config */
-dotenv.config({ path: "./config/config.env" });
-/*Passport Config */
-require("./config/passport")(passport);
 /*Connect DB */
 connectDB();
 /*Initialize App */
@@ -20,9 +26,11 @@ const app = express();
 /*Body Parser */
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+/*Define Static Folder */
+app.use(express.static(path.join(`${__dirname}/public`)));
 /*Method Override for Http Requests */
 app.use(
-  methodOverride(function (req, res) {
+  methodOverride(function (req: Request, res: Response) {
     if (req.body && typeof req.body === "object" && "_method" in req.body) {
       // look in urlencoded POST bodies and delete it
       let method = req.body._method;
@@ -32,51 +40,54 @@ app.use(
   })
 );
 /*Logging Devenviroment */
-if (process.env.NODE_ENV === "development") {
+if (`${ENVIRONMENT}` === "development") {
   app.use(morgan("dev"));
 }
-/*Handlebars Helper */
-const { formatDate, stripString, editIcon, select } = require("./helpers/hbs");
+
 /*Handlebars */
 app.engine(
   ".hbs",
   engine({
-    helpers: { formatDate, stripString, editIcon, select },
+    // helpers: { formatDate, stripString, editIcon, select },
+    helpers: { formatDate, stripString, editIcon },
     extname: ".hbs",
   })
 );
 app.set("view engine", ".hbs");
+app.set("views", "./src/views/");
+
 /*Sessions */
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: `${SESSION_SECRET}`,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI,
+      mongoUrl: `${MONGO_URI}`,
       autoRemove: "native",
     }),
   })
 );
+
 /*Passport Middleware */
 app.use(passport.initialize());
 app.use(passport.session());
-
+passportConfig;
+serializeUser;
+deserializeUser;
 /*Set globar vars*/
-app.use(function (req, res, next) {
+app.use(function (req: Request, res: Response, next: NextFunction) {
   res.locals.user = req.user || null;
   next();
 });
-/*Routes */
-app.use("/", require("./routes/index"));
-app.use("/auth", require("./routes/auth"));
-app.use("/stories", require("./routes/stories"));
-/*Define Static Folder */
-app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/", index);
+app.use("/auth", authRoutes);
+app.use("/stories", storyRoutes);
+
 /*Define Ports */
 const PORT = process.env.PORT || 5000;
 
-app.listen(
-  PORT,
+app.listen(PORT, () =>
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
