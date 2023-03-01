@@ -7,7 +7,7 @@ import { IUser } from "../models/User";
  * @route GET /
  */
 export const index: RequestHandler = async (req, res, next) => {
-  res.render("login");
+  res.render("login", { layout: "login" });
 };
 
 /**
