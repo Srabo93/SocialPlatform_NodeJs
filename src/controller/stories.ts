@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import Story from "../models/Story";
+import { IUser } from "../models/User";
 
 /**
  * @desc Show Add page
@@ -48,62 +49,68 @@ export const story: RequestHandler = async (req, res, next) => {
  * @desc Process added Story
  * @route POST /stories/
  */
-// export const addStory: RequestHandler = async (req, res, next) => {
-//   try {
-//     req.body.user = req.user.id;
-//     await Story.create(req.body);
-//     res.redirect("/dashboard");
-//   } catch (error) {
-//     console.log(error);
-//     res.render("../views/errors/500");
-//   }
-// };
+export const addStory: RequestHandler = async (req, res, next) => {
+  try {
+    const user = req.user as IUser;
+    req.body.user = user.id;
+
+    await Story.create(req.body);
+    res.redirect("/dashboard");
+  } catch (error) {
+    console.log(error);
+    res.render("../views/errors/500");
+  }
+};
 /**
  * @desc Edit a Story
  * @route GET /stories/edit/:id
  */
-// export const editStory: RequestHandler = async (req, res, next) => {
-//   try {
-//     const story = await Story.findOne({ _id: req.params.id }).lean();
+export const editStory: RequestHandler = async (req, res, next) => {
+  try {
+    const story = await Story.findOne({ _id: req.params.id }).lean();
 
-//     if (!story) return res.render("error/404");
+    if (!story) return res.render("error/404");
 
-//     story.user != req.user.id
-//       ? res.redirect("/stories")
-//       : res.render("stories/edit", { story });
-//   } catch (error) {
-//     console.log(error);
-//     res.redirect("error/500");
-//   }
-// };
+    const user = req.user as IUser;
+
+    story.user != user.id
+      ? res.redirect("/stories")
+      : res.render("stories/edit", { story });
+  } catch (error) {
+    console.log(error);
+    res.redirect("error/500");
+  }
+};
 
 /**
  * @desc Update a Story
  * @route PUT /stories/:id
  */
-// export const updateStory: RequestHandler = async (req, res, next) => {
-//   try {
-//     let story = await Story.findById(req.params.id).lean();
+export const updateStory: RequestHandler = async (req, res, next) => {
+  try {
+    let story = await Story.findById(req.params.id).lean();
 
-//     if (!story) return res.render("error/404");
+    if (!story) return res.render("error/404");
 
-//     story.user != req.user.id
-//       ? res.redirect("/stories")
-//       : (story = await Story.findOneAndUpdate(
-//           { _id: req.params.id },
-//           req.body,
-//           {
-//             new: true,
-//             runValidators: true,
-//           }
-//         ));
+    const user = req.user as IUser;
 
-//     res.redirect("/dashboard");
-//   } catch (error) {
-//     console.log(error);
-//     res.redirect("error/500");
-//   }
-// };
+    story.user != user.id
+      ? res.redirect("/stories")
+      : (story = await Story.findOneAndUpdate(
+          { _id: req.params.id },
+          req.body,
+          {
+            new: true,
+            runValidators: true,
+          }
+        ));
+
+    res.redirect("/dashboard");
+  } catch (error) {
+    console.log(error);
+    res.redirect("error/500");
+  }
+};
 
 /**
  * @desc Delete Story

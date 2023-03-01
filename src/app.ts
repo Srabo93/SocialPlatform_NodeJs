@@ -12,7 +12,7 @@ import {
   serializeUser,
 } from "./config/passport";
 import { engine } from "express-handlebars";
-import { editIcon, stripString, formatDate } from "./helpers/hbs";
+import { editIcon, stripString, formatDate, select } from "./helpers/hbs";
 import morgan from "morgan";
 /*Routes */
 import storyRoutes from "./routes/stories";
@@ -48,8 +48,7 @@ if (`${ENVIRONMENT}` === "development") {
 app.engine(
   ".hbs",
   engine({
-    // helpers: { formatDate, stripString, editIcon, select },
-    helpers: { formatDate, stripString, editIcon },
+    helpers: { formatDate, stripString, editIcon, select },
     extname: ".hbs",
   })
 );

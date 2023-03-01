@@ -1,4 +1,6 @@
 import { RequestHandler } from "express";
+import Story from "../models/Story";
+import { IUser } from "../models/User";
 
 /**
  * @desc Login/Landing page
@@ -15,11 +17,12 @@ export const index: RequestHandler = async (req, res, next) => {
 
 export const dashboard: RequestHandler = async (req, res, next) => {
   try {
-    // const stories = await Story.find({ user: req.user.id }).lean();
+    const user = req.user as IUser;
+    const stories = await Story.find({ user: user.id }).lean();
 
     res.render("dashboard", {
-      // name: req.user.displayName,
-      // stories,
+      name: user.displayName,
+      stories,
     });
   } catch (error) {
     console.log(error);

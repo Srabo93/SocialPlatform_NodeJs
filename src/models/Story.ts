@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-interface IStory {
+export interface IStory {
+  id: mongoose.Types.ObjectId;
   title: string;
   body: string;
   status: string;

@@ -21,12 +21,16 @@ export function editIcon(storyUser, loggedUser, storyId, floating = true) {
     return "";
   }
 }
-// export function select(selected, options) {
-//   return options
-//     .fn(this)
-//     .replace(new RegExp(' value="' + selected + '"'), '$& selected="selected"')
-//     .replace(
-//       new RegExp(">" + selected + "</options"),
-//       ' selected="selected"$&'
-//     );
-// }
+export function select(
+  this: any,
+  selected: string,
+  options: { fn: (arg0: any) => string }
+) {
+  return options
+    .fn(this)
+    .replace(new RegExp(' value="' + selected + '"'), '$& selected="selected"')
+    .replace(
+      new RegExp(">" + selected + "</options"),
+      ' selected="selected"$&'
+    );
+}
