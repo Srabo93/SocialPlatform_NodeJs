@@ -9,7 +9,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node /build/app.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon ./src/app.ts\"",
-    "copy-static-assets": "ts-node copyStaticAssets.ts"
+    "copy-static-assets": "node copyStaticAssets.js",
+    "build-ts": "tsc",
+    "build": "npm run build-ts && npm run copy-static-assets"
   },
   "author": "Armin Srabovic",
   "license": "MIT",
