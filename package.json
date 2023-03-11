@@ -36,7 +36,7 @@
     "@types/method-override": "^0.0.32",
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.4",
-    "@types/node": "^18.14.1",
+    "@types/node": "^18.15.0",
     "@types/passport": "^1.0.12",
     "@types/passport-google-oauth20": "^2.0.11",
     "@types/shelljs": "^0.8.11",

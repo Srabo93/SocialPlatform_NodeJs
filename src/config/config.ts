@@ -10,11 +10,11 @@ if (fs.existsSync(".env")) {
   dotenv.config({ path: ".env.example" }); // you can delete this after you create your own .env file!
 }
 
-export const ENVIRONMENT = process.env.NODE_ENV;
-export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-export const MONGO_URI = process.env.MONGO_URI;
-export const SESSION_SECRET = process.env.SESSION_SECRET;
+export const ENVIRONMENT = process.env.NODE_ENV as string;
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET as string;
+export const MONGO_URI = process.env.MONGO_URI as string;
+export const SESSION_SECRET = process.env.SESSION_SECRET as string;
 
 if (!SESSION_SECRET) {
   console.log("No client secret. Set SESSION_SECRET environment variable.");
