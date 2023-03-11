@@ -1,9 +1,9 @@
 import { connect, ConnectOptions } from "mongoose";
-
+import { MONGO_URI } from "./config"
 const connectDB = async () => {
   try {
     await connect(
-       process.env.MONGO_URI,
+       MONGO_URI,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
