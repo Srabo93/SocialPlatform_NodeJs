@@ -3,8 +3,7 @@ import { connect, ConnectOptions } from "mongoose";
 const connectDB = async () => {
   try {
     await connect(
-      // process.env.MONGO_URI,
-      "mongodb+srv://Armin:TellTale1962@cluster0.qelcv.mongodb.net/TellTale?retryWrites=true&w=majority",
+       process.env.MONGO_URI,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
