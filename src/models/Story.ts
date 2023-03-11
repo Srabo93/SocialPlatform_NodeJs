@@ -1,6 +1,13 @@
-const mongoose = require("mongoose");
-
-const StorySchema = new mongoose.Schema({
+import mongoose from "mongoose";
+export interface IStory {
+  id: mongoose.Types.ObjectId;
+  title: string;
+  body: string;
+  status: string;
+  user: mongoose.Types.ObjectId;
+  createdAt?: string;
+}
+const StorySchema = new mongoose.Schema<IStory>({
   title: {
     type: String,
     required: true,
@@ -24,4 +31,5 @@ const StorySchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-module.exports = mongoose.model("Story", StorySchema);
+const Story = mongoose.model("Story", StorySchema);
+export default Story;
